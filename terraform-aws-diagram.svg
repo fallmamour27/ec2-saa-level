@@ -1,0 +1,108 @@
+<svg width="860" height="580" xmlns="http://www.w3.org/2000/svg" font-family="Arial, sans-serif">
+
+  <!-- Background -->
+  <rect width="860" height="580" fill="#F8F9FA" rx="8"/>
+
+  <!-- Title -->
+  <text x="430" y="34" text-anchor="middle" font-size="16" font-weight="bold" fill="#1F4E79">Terraform AWS Environment — EC2 Web Server Architecture</text>
+
+  <!-- Internet -->
+  <ellipse cx="430" cy="76" rx="80" ry="28" fill="#E8F4FD" stroke="#1F4E79" stroke-width="2"/>
+  <text x="430" y="72" text-anchor="middle" font-size="13" font-weight="bold" fill="#1F4E79">Internet</text>
+  <text x="430" y="88" text-anchor="middle" font-size="11" fill="#444">Public Traffic</text>
+
+  <!-- Arrow: Internet to Security Group -->
+  <line x1="430" y1="104" x2="430" y2="138" stroke="#888" stroke-width="1.5" marker-end="url(#arrow)"/>
+  <text x="448" y="124" font-size="10" fill="#666">HTTP :80</text>
+
+  <!-- VPC Box -->
+  <rect x="60" y="148" width="740" height="390" fill="#EEF6FB" stroke="#1F4E79" stroke-width="2" rx="10" stroke-dasharray="8,4"/>
+  <text x="80" y="170" font-size="12" font-weight="bold" fill="#1F4E79">VPC: 10.0.0.0/16</text>
+
+  <!-- Public Subnet Box -->
+  <rect x="100" y="180" width="580" height="330" fill="#E1F0E8" stroke="#2E7D32" stroke-width="1.5" rx="8" stroke-dasharray="6,3"/>
+  <text x="120" y="200" font-size="11" font-weight="bold" fill="#2E7D32">Public Subnet: 10.0.1.0/24  |  map_public_ip_on_launch: true</text>
+
+  <!-- Security Group Box -->
+  <rect x="130" y="210" width="520" height="200" fill="#FFF8E1" stroke="#F9A825" stroke-width="1.5" rx="6" stroke-dasharray="5,3"/>
+  <text x="150" y="228" font-size="11" font-weight="bold" fill="#F57F17">Security Group: web-sg</text>
+  <text x="150" y="244" font-size="10" fill="#666">Inbound: HTTP :80 (0.0.0.0/0)  |  SSH :22 (Key Pair)  |  Outbound: All traffic</text>
+
+  <!-- EC2 Box -->
+  <rect x="160" y="256" width="200" height="130" fill="#FF9900" fill-opacity="0.12" stroke="#FF9900" stroke-width="2" rx="6"/>
+  <text x="260" y="278" text-anchor="middle" font-size="12" font-weight="bold" fill="#E65100">EC2 Instance</text>
+  <text x="260" y="296" text-anchor="middle" font-size="10" fill="#444">Type: t2.micro</text>
+  <text x="260" y="312" text-anchor="middle" font-size="10" fill="#444">AMI: Amazon Linux 2</text>
+  <text x="260" y="328" text-anchor="middle" font-size="10" fill="#444">Apache (httpd) via user_data</text>
+  <text x="260" y="344" text-anchor="middle" font-size="10" fill="#444">Tag: web-server</text>
+  <text x="260" y="360" text-anchor="middle" font-size="10" fill="#444">Subnet: 10.0.1.0/24</text>
+
+  <!-- ENI Box -->
+  <rect x="400" y="256" width="220" height="130" fill="#E8EAF6" stroke="#3949AB" stroke-width="2" rx="6"/>
+  <text x="510" y="278" text-anchor="middle" font-size="12" font-weight="bold" fill="#283593">Elastic Network Interface</text>
+  <text x="510" y="296" text-anchor="middle" font-size="10" fill="#444">Private IP: 10.0.1.100</text>
+  <text x="510" y="312" text-anchor="middle" font-size="10" fill="#444">Subnet: public_subnet</text>
+  <text x="510" y="328" text-anchor="middle" font-size="10" fill="#444">SG: web-sg</text>
+  <text x="510" y="344" text-anchor="middle" font-size="10" fill="#444">Device Index: 1</text>
+  <text x="510" y="360" text-anchor="middle" font-size="10" fill="#444">Attached to EC2</text>
+
+  <!-- Arrow EC2 to ENI -->
+  <line x1="360" y1="320" x2="400" y2="320" stroke="#3949AB" stroke-width="1.5" marker-end="url(#arrowblue)"/>
+  <text x="365" y="314" font-size="9" fill="#3949AB">attach</text>
+
+  <!-- Elastic IP -->
+  <rect x="160" y="420" width="200" height="60" fill="#FCE4EC" stroke="#C62828" stroke-width="2" rx="6"/>
+  <text x="260" y="444" text-anchor="middle" font-size="12" font-weight="bold" fill="#B71C1C">Elastic IP (EIP)</text>
+  <text x="260" y="462" text-anchor="middle" font-size="10" fill="#444">Associated to EC2 instance</text>
+
+  <!-- Arrow EC2 to EIP -->
+  <line x1="260" y1="386" x2="260" y2="420" stroke="#C62828" stroke-width="1.5" marker-end="url(#arrowred)"/>
+
+  <!-- Key Pair Box -->
+  <rect x="710" y="240" width="130" height="70" fill="#F3E5F5" stroke="#7B1FA2" stroke-width="2" rx="6"/>
+  <text x="775" y="264" text-anchor="middle" font-size="12" font-weight="bold" fill="#6A1B9A">Key Pair</text>
+  <text x="775" y="282" text-anchor="middle" font-size="10" fill="#444">terraform-key</text>
+  <text x="775" y="298" text-anchor="middle" font-size="10" fill="#444">~/.ssh/id_rsa.pub</text>
+
+  <!-- Arrow Key Pair to EC2 -->
+  <line x1="710" y1="275" x2="630" y2="310" stroke="#7B1FA2" stroke-width="1.5" stroke-dasharray="5,3" marker-end="url(#arrowpurple)"/>
+  <text x="668" y="284" font-size="9" fill="#7B1FA2">SSH :22</text>
+
+  <!-- Terraform Label -->
+  <rect x="680" y="370" width="140" height="50" fill="#E0F2F1" stroke="#00897B" stroke-width="1.5" rx="6"/>
+  <text x="750" y="390" text-anchor="middle" font-size="11" font-weight="bold" fill="#00695C">Terraform IaC</text>
+  <text x="750" y="408" text-anchor="middle" font-size="10" fill="#444">init / plan / apply</text>
+
+  <!-- Legend -->
+  <rect x="62" y="548" width="12" height="12" fill="#EEF6FB" stroke="#1F4E79" stroke-width="1.5"/>
+  <text x="80" y="559" font-size="10" fill="#444">VPC</text>
+  <rect x="122" y="548" width="12" height="12" fill="#E1F0E8" stroke="#2E7D32" stroke-width="1.5"/>
+  <text x="140" y="559" font-size="10" fill="#444">Subnet</text>
+  <rect x="192" y="548" width="12" height="12" fill="#FFF8E1" stroke="#F9A825" stroke-width="1.5"/>
+  <text x="210" y="559" font-size="10" fill="#444">Security Group</text>
+  <rect x="300" y="548" width="12" height="12" fill="#FF9900" fill-opacity="0.2" stroke="#FF9900" stroke-width="1.5"/>
+  <text x="318" y="559" font-size="10" fill="#444">EC2</text>
+  <rect x="348" y="548" width="12" height="12" fill="#FCE4EC" stroke="#C62828" stroke-width="1.5"/>
+  <text x="366" y="559" font-size="10" fill="#444">Elastic IP</text>
+  <rect x="420" y="548" width="12" height="12" fill="#E8EAF6" stroke="#3949AB" stroke-width="1.5"/>
+  <text x="438" y="559" font-size="10" fill="#444">ENI</text>
+  <rect x="476" y="548" width="12" height="12" fill="#F3E5F5" stroke="#7B1FA2" stroke-width="1.5"/>
+  <text x="494" y="559" font-size="10" fill="#444">Key Pair</text>
+
+  <!-- Arrowhead markers -->
+  <defs>
+    <marker id="arrow" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto">
+      <path d="M0,0 L0,6 L8,3 z" fill="#888"/>
+    </marker>
+    <marker id="arrowblue" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto">
+      <path d="M0,0 L0,6 L8,3 z" fill="#3949AB"/>
+    </marker>
+    <marker id="arrowred" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto">
+      <path d="M0,0 L0,6 L8,3 z" fill="#C62828"/>
+    </marker>
+    <marker id="arrowpurple" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto">
+      <path d="M0,0 L0,6 L8,3 z" fill="#7B1FA2"/>
+    </marker>
+  </defs>
+
+</svg>
